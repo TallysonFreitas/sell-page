@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Paragraph from "../../components/Paragraph";
 
 export type CEPType = {
     bairro: string;
@@ -24,47 +25,177 @@ export type data = {
 const About = ({ description, img, name, price }: data) => {
     const [cepTemp, setCepTemp] = useState<string>("");
     const [cep, setCep] = useState<CEPType>();
+    const [quantity, setQuantity] = useState(1);
 
     function buscaCEP() {
-        fetch(`https://viacep.com.br/ws/${cepTemp}/json/`)
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                setCep(data);
-            });
+        if (cepTemp.length == 8) {
+            fetch(`https://viacep.com.br/ws/${cepTemp}/json/`)
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    setCep(data);
+                });
+        } else {
+            window.alert("CEP invalido");
+        }
     }
 
     return (
-        <div className="container py-5">
+        <div className="container-lg py-5">
             <div className="row pt-5">
                 <div className="col">
-                    <img
-                        className="img-fluid"
-                        src={img}
-                        alt="Natura Homem ESSENC"
-                    />
+                    <div
+                        id="carouselExample"
+                        className="carousel slide carousel-dark"
+                        data-bs-ride="carousel"
+                    >
+                        <div className="carousel-inner">
+                            <div className="carousel-item active">
+                                <img
+                                    className="d-block w-100"
+                                    src={img}
+                                    alt="Natura Homem ESSENC"
+                                />
+                            </div>
+                            <div className="carousel-item">
+                                <img
+                                    className="d-block w-100"
+                                    src="https://production.na01.natura.com/on/demandware.static/-/Sites-natura-br-storefront-catalog/default/dwee0be46b/Produtos/NATBRA-59847_4.jpg"
+                                    alt="Natura Homem ESSENC"
+                                />
+                            </div>
+                            <div className="carousel-item">
+                                <img
+                                    className="d-block w-100"
+                                    src="https://production.na01.natura.com/on/demandware.static/-/Sites-natura-br-storefront-catalog/default/dwf1a82e09/Produtos/NATBRA-59847_1.jpg"
+                                    alt="Natura Homem ESSENC"
+                                />
+                            </div>
+                        </div>
+                        <button
+                            className="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide="prev"
+                        >
+                            <span
+                                className="carousel-control-prev-icon"
+                                aria-hidden="true"
+                            ></span>
+                            <span className="visually-hidden">Previous</span>
+                        </button>
+                        <button
+                            className="carousel-control-next"
+                            type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide="next"
+                        >
+                            <span
+                                className="carousel-control-next-icon"
+                                aria-hidden="true"
+                            ></span>
+                            <span className="visually-hidden">Next</span>
+                        </button>
+                    </div>
                 </div>
                 <div className="col">
-                    <div className="bg-light container-fluid h-100">
-                        <h2 className="fw-normal pt-4 pb-1">{name}</h2>
-                        <p className="lead fs-6 pb-2 mb-0">NATURA HOMEM</p>
-                        <p className="lead fs-6 pb-4 mb-0">
-                            Cod. NATBRA-59847 - Desodorante Perfume Natura Homem
-                            Essence 100 ml
-                        </p>
-                        <p className="text-danger fw-bold fs-2 mb-0">
-                            R$ {price}
-                        </p>
-                        <p className="lead fs-6">
-                            À vista ou em até{" "}
-                            <strong className="fw-bold">6x de R$ 33,32</strong>{" "}
-                            sem juros
-                        </p>
+                    <div className="bg-light container-fluid h-100 p-4">
+                        {/* Title */}
+                        <h2 className="fw-normal my-4">{name}</h2>
+
+                        {/* Code, minimal description */}
+                        <div className="mb-4">
+                            <Paragraph size="normal">NATURA HOMEM</Paragraph>
+                            <Paragraph size="small">
+                                Cod. NATBRA-59847 - Desodorante Perfume Natura
+                                Homem Essence 100 ml
+                            </Paragraph>
+                        </div>
+
+                        {/* Assessments */}
+                        <div className="mb-3">
+                            <i
+                                className="bi bi-star-fill pe-1"
+                                style={{ color: "#FCC433" }}
+                            ></i>
+                            <i
+                                className="bi bi-star-fill pe-1"
+                                style={{ color: "#FCC433" }}
+                            ></i>
+                            <i
+                                className="bi bi-star-fill pe-1"
+                                style={{ color: "#FCC433" }}
+                            ></i>
+                            <i
+                                className="bi bi-star-fill pe-1"
+                                style={{ color: "#FCC433" }}
+                            ></i>
+                            <i
+                                className="bi bi-star-fill pe-1"
+                                style={{ color: "#FCC433" }}
+                            ></i>
+                            <span className="fs-8 ms-3">534 avaliacoes</span>
+                        </div>
+
+                        {/* Prices */}
+                        <div className=" mb-4">
+                            <p className="text-danger fw-bold fs-2 mb-0">
+                                R$ {price},99
+                            </p>
+                            <p className="lead fs-6">
+                                À vista ou em até{" "}
+                                <strong className="fw-bold">
+                                    6x de R$ 33,32
+                                </strong>{" "}
+                                sem juros
+                            </p>
+                        </div>
+
+                        {/* Quantity control */}
+                        <div className="mb-4 d-flex justify-content-start gap-3">
+                            <div
+                                className="btn-group"
+                                role="group"
+                                aria-label="Basic example"
+                            >
+                                <button
+                                    type="button"
+                                    className="btn btn-danger rounded-start-pill ps-3"
+                                    disabled={quantity == 1}
+                                    onClick={() => {
+                                        setQuantity(quantity - 1);
+                                    }}
+                                >
+                                    -
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    disabled
+                                >
+                                    {quantity}
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger rounded-end-pill pe-3"
+                                    onClick={() => {
+                                        setQuantity(quantity + 1);
+                                    }}
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button className="btn btn-danger px-5 rounded-pill fw-normal">
+                                <i className="bi bi-basket3 pe-1"></i>adicionar
+                            </button>
+                        </div>
+
+                        {/* CEP Buttons  */}
                         {cep == null ? (
                             <button
                                 type="button"
-                                className="btn btn-outline-dark w-100 py-2 fs-6"
+                                className="btn btn-outline-danger w-100 py-3 fs-6"
                                 data-bs-toggle="modal"
                                 data-bs-target="#searchCEP"
                             >
@@ -72,15 +203,23 @@ const About = ({ description, img, name, price }: data) => {
                                 sua região.
                             </button>
                         ) : (
-                            <div className="border border-1 border-dark p-3 rounded">
+                            <div className="border border-1 border-dark p-3 rounded d-flex justify-content-between align-items-center">
                                 <p className="mb-0 fs-6 fw-bold">
                                     Entregar em:{" "}
                                     <span className="fw-normal">
                                         {cep.localidade} - {cep.uf}
                                     </span>
                                 </p>
+                                <button
+                                    className="btn btn-link"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#searchCEP"
+                                >
+                                    alterar
+                                </button>
                             </div>
                         )}
+
                         {/* Modal */}
                         <div
                             className="modal fade"
@@ -106,7 +245,10 @@ const About = ({ description, img, name, price }: data) => {
                                         ></button>
                                     </div>
                                     <div className="modal-body">
-                                        <form className="needs-validation">
+                                        <form
+                                            className="needs-validation"
+                                            noValidate
+                                        >
                                             <p>
                                                 a disponibilidade de estoque
                                                 pode variar dependendo da região
@@ -137,7 +279,11 @@ const About = ({ description, img, name, price }: data) => {
                                                     Please provide a valid city.
                                                 </div>
                                             </div>
-                                            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php">
+                                            <a
+                                                href="https://buscacepinter.correios.com.br/app/endereco/index.php"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
                                                 nao sei meu CEP
                                             </a>
 
@@ -146,12 +292,9 @@ const About = ({ description, img, name, price }: data) => {
                                                     id="confirma-cep"
                                                     type="button"
                                                     className="btn btn-dark w-100 rounded-pill"
+                                                    data-bs-dismiss="modal"
                                                     onClick={() => {
-                                                        if (
-                                                            cepTemp.length == 8
-                                                        ) {
-                                                            buscaCEP();
-                                                        }
+                                                        buscaCEP();
                                                     }}
                                                 >
                                                     confirmar
@@ -162,7 +305,19 @@ const About = ({ description, img, name, price }: data) => {
                                 </div>
                             </div>
                         </div>
-                        <p className="mt-5">{description}</p>
+
+                        {/* Description */}
+                        <p className="mt-4">
+                            {description} Lorem ipsum dolor sit amet consectetur
+                            adipisicing elit. Perferendis fugit fugiat, qui
+                            debitis adipisci alias modi ipsum dolorum, assumenda
+                            rerum repellendus. Animi eveniet quasi, accusamus
+                            omnis dolores eum unde eos. Lorem ipsum dolor sit
+                            amet consectetur adipisicing elit. Unde aspernatur
+                            facere error corporis fuga fugiat molestiae sint,
+                            numquam distinctio facilis. Magni aliquam molestiae
+                            reiciendis illo at a atque mollitia? Quis!
+                        </p>
                     </div>
                 </div>
             </div>
