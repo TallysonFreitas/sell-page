@@ -14,6 +14,14 @@ export const EstiloGlobal = createGlobalStyle`
     height:200vh;
     background-color:#f1f1f1;
     }
+
+    .fs-7{
+    font-size:14px;
+    }
+
+    .fs-8{
+    font-size:12px;
+    }
 `
 
 export const Container = styled.div`
