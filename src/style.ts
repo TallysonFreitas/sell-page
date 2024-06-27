@@ -22,6 +22,14 @@ export const EstiloGlobal = createGlobalStyle`
     .fs-8{
     font-size:12px;
     }
+
+    .text-gray{
+    color:#737373;
+    }
+
+    .mb-6{
+    margin-bottom:6rem;
+    }
 `
 
 export const Container = styled.div`
