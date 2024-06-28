@@ -12,7 +12,7 @@ export const EstiloGlobal = createGlobalStyle`
     body{
     width:100%;
     height:200vh;
-    background-color:#f1f1f1;
+    background-color:#FAFAFA;
     }
 
     .fs-7{
@@ -29,6 +29,10 @@ export const EstiloGlobal = createGlobalStyle`
 
     .mb-6{
     margin-bottom:6rem;
+    }
+
+    .text-blacked{
+    color:#363636;
     }
 `
 
