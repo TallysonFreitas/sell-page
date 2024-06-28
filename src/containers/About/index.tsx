@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Paragraph from "../../components/Paragraph";
 import Section from "../Section";
+import { useAppDispatch } from "../../redux/hooks";
+import { incrementTotalPrice } from "../../redux/reducers/cartReducer";
 
 export type CEPType = {
     bairro: string;
@@ -28,19 +30,42 @@ export type data = {
 };
 
 const About = ({ caracteristicas }: data) => {
+    const dispatch = useAppDispatch();
+
     const [cepTemp, setCepTemp] = useState<string>("");
     const [cep, setCep] = useState<CEPType>();
     const [quantity, setQuantity] = useState(1);
 
+    const mockSection = [
+        {
+            img: "https://production.na01.natura.com/on/demandware.static/-/Sites-NatBrazil-Library/default/dw045bfce9/59847-59847_caminho_olfativo.jpg",
+            link: "",
+            title: "Fragrância",
+            description:
+                "Natura Homem Essence é um deo parfum que exala um aroma amadeirado intenso. Criada para quem busca uma experiência olfativa intensa e memorável. Natura Homem Essence é um deo parfum que exala um aroma amadeirado intenso. Criada para quem busca uma experiência olfativa intensa e memorável.",
+        },
+        {
+            img: "https://production.na01.natura.com/on/demandware.static/-/Sites-natura-br-storefront-catalog/default/dwd1400169/Produtos/NATBRA-59847_3.jpg;",
+            link: "",
+            title: "Dicas de uso",
+            description:
+                "Cada pessoa tem seu jeito único de se perfumar. No entanto, para aproveitar ao máximo o potencial da fragrância masculina, recomendamos aplicá-la em áreas estratégicas, como punho, pescoço e atrás das orelhas. Essas regiões possuem maior circulação sanguínea, o que ajuda a difundir o aroma de maneira mais intensa.",
+        },
+    ];
+
     function buscaCEP() {
         if (cepTemp.length == 8) {
-            fetch(`https://viacep.com.br/ws/${cepTemp}/json/`)
-                .then((res) => {
-                    return res.json();
-                })
-                .then((data) => {
-                    setCep(data);
-                });
+            try {
+                fetch(`https://viacep.com.br/ws/${cepTemp}/json/`)
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        setCep(data);
+                    });
+            } catch (error) {
+                console.log(error);
+            }
         } else {
             window.alert("CEP invalido");
         }
@@ -67,7 +92,10 @@ const About = ({ caracteristicas }: data) => {
                 {/* Product */}
                 <div className="row pt-3">
                     <div className="col-lg placeholder-glow">
-                        <div className="w-100 h-100 placeholder"></div>
+                        <div
+                            className="w-100 h-100 placeholder"
+                            style={{ minHeight: "400px" }}
+                        ></div>
                     </div>
                     <div className="col">
                         <div className="bg-light container-fluid h-100 p-4 placeholder-glow">
@@ -116,13 +144,13 @@ const About = ({ caracteristicas }: data) => {
                             {/* Quantity control */}
                             <div className="mb-4 d-flex justify-content-start gap-3">
                                 <div
-                                    className="btn-group"
+                                    className="btn-group placeholder rounded-pill"
                                     role="group"
                                     aria-label="Basic example"
                                 >
                                     <button
                                         type="button"
-                                        className="btn btn-danger rounded-start-pill ps-3"
+                                        className="btn btn-gray rounded-start-pill ps-3"
                                         disabled={quantity == 1}
                                         onClick={() => {
                                             setQuantity(quantity - 1);
@@ -132,14 +160,14 @@ const About = ({ caracteristicas }: data) => {
                                     </button>
                                     <button
                                         type="button"
-                                        className="btn btn-danger"
+                                        className="btn btn-gray"
                                         disabled
                                     >
                                         {quantity}
                                     </button>
                                     <button
                                         type="button"
-                                        className="btn btn-danger rounded-end-pill pe-3"
+                                        className="btn btn-gray rounded-end-pill pe-3"
                                         onClick={() => {
                                             setQuantity(quantity + 1);
                                         }}
@@ -148,7 +176,7 @@ const About = ({ caracteristicas }: data) => {
                                     </button>
                                 </div>
                                 <button
-                                    className="btn btn-danger px-5 rounded-pill fw-normal"
+                                    className="btn btn-gray placeholder px-5 rounded-pill fw-normal"
                                     data-bs-toggle="modal"
                                     data-bs-target="#searchCEP"
                                 >
@@ -161,7 +189,7 @@ const About = ({ caracteristicas }: data) => {
                             {cep == null ? (
                                 <button
                                     type="button"
-                                    className="btn btn-outline-danger w-100 py-3 fs-6"
+                                    className="btn btn-gray w-100 py-3 fs-6 placeholder"
                                     data-bs-toggle="modal"
                                     data-bs-target="#searchCEP"
                                 >
@@ -292,13 +320,13 @@ const About = ({ caracteristicas }: data) => {
                     </div>
                 </div>
             </div>
-            <Section direction="anticlockwise" />
-            <Section direction="clockwise" />
+            <Section info={null} direction="anticlockwise" />
+            <Section info={null} direction="clockwise" />
             <div className="pb-5"></div>
         </>
     ) : (
         <>
-            <div className="container-lg py-5 mb-6">
+            <div className="container-lg py-5 mb-6 text-blacked">
                 {/* Way */}
                 <div className="row pt-5">
                     <nav aria-label="breadcrumb">
@@ -318,6 +346,7 @@ const About = ({ caracteristicas }: data) => {
 
                 {/* Product */}
                 <div className="row pt-3">
+                    {/* Carousel image */}
                     <div className="col-lg">
                         <div
                             id="carouselExample"
@@ -376,7 +405,7 @@ const About = ({ caracteristicas }: data) => {
                         </div>
                     </div>
                     <div className="col">
-                        <div className="bg-light container-fluid h-100 p-4">
+                        <div className="bg-white container-fluid h-100 p-4">
                             {/* Title */}
                             <h2 className="fw-normal my-4">
                                 {caracteristicas.name}
@@ -472,6 +501,16 @@ const About = ({ caracteristicas }: data) => {
                                     className="btn btn-danger px-5 rounded-pill fw-normal"
                                     data-bs-toggle="modal"
                                     data-bs-target="#searchCEP"
+                                    onClick={() => {
+                                        if (caracteristicas.price != null) {
+                                            dispatch(
+                                                incrementTotalPrice(
+                                                    caracteristicas.price *
+                                                        quantity
+                                                )
+                                            );
+                                        }
+                                    }}
                                 >
                                     <i className="bi bi-basket3 pe-1"></i>
                                     adicionar
@@ -614,8 +653,15 @@ const About = ({ caracteristicas }: data) => {
                     </div>
                 </div>
             </div>
-            <Section direction="anticlockwise" />
-            <Section direction="clockwise" />
+            {mockSection.map((each) => {
+                return (
+                    <Section
+                        info={each}
+                        direction="clockwise"
+                        key={each.title}
+                    />
+                );
+            })}
             <div className="pb-5"></div>
         </>
     );
