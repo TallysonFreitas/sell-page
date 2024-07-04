@@ -1,10 +1,15 @@
 import React from "react";
+import { useAppSelector } from "../../redux/hooks";
 
 const Header = () => {
+    const { products } = useAppSelector((state) => {
+        return state.cart;
+    });
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-light position-fixed top-0 start-0 w-100 z-2">
                 <div className="container-md p-1">
+                    {/* toggle button */}
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -16,6 +21,8 @@ const Header = () => {
                     >
                         <span className="navbar-toggler-icon"></span>
                     </button>
+
+                    {/* navbar */}
                     <div
                         className="collapse navbar-collapse"
                         id="navbarSupportedContent"
@@ -55,6 +62,8 @@ const Header = () => {
                             </li>
                         </ul>
                     </div>
+
+                    {/* cart icon */}
                     <button
                         className="btn btn-danger position-relative me-4"
                         data-bs-toggle="offcanvas"
@@ -65,12 +74,14 @@ const Header = () => {
                             className="bi bi-basket3"
                             style={{ color: "#FFF" }}
                         ></i>
-                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            2
-                            <span className="visually-hidden">
-                                unread messages
+                        {products.length > 0 && (
+                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {products.length}
+                                <span className="visually-hidden">
+                                    unread messages
+                                </span>
                             </span>
-                        </span>
+                        )}
                     </button>
                 </div>
             </nav>
@@ -93,9 +104,60 @@ const Header = () => {
                     ></button>
                 </div>
                 <div className="offcanvas-body">
-                    <div>Quando voce adicionar um item ele aparecerá aqui!</div>
+                    {products.length == 0 ? (
+                        <div>
+                            Quando voce adicionar um item ele aparecerá aqui!
+                        </div>
+                    ) : (
+                        <>
+                            {products.map((each) => (
+                                <div
+                                    key={each.id}
+                                    className="card mb-3"
+                                    style={{ maxWidth: "540px" }}
+                                >
+                                    <div className="row g-0">
+                                        <div className="col-md-4">
+                                            <img
+                                                src={
+                                                    each.image != null
+                                                        ? each.image
+                                                        : ""
+                                                }
+                                                className="w-100 object-fit-cover h-100"
+                                                alt={
+                                                    each.name != null
+                                                        ? each.name
+                                                        : ""
+                                                }
+                                            />
+                                        </div>
+                                        <div className="col-md-8">
+                                            <div className="card-body">
+                                                <h5 className="card-title fs-6">
+                                                    {each.name}
+                                                </h5>
+                                                <p className="card-text fs-7 mb-1">
+                                                    {each.description}
+                                                </p>
+                                                <p className="card-text">
+                                                    <small className="text-body-secondary fs-5">
+                                                        {each.price}
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}
+
                     <div className="dropdown mt-3">
-                        <button className="btn btn-danger" disabled>
+                        <button
+                            className="btn btn-danger"
+                            disabled={products.length == 0}
+                        >
                             checkout <i className="bi bi-arrow-right ms-1"></i>
                         </button>
                     </div>

@@ -4,7 +4,7 @@ import cartReducer from "./reducers/cartReducer";
 
 export const store = configureStore({
     reducer:{
-        user:userReducer,
+        user: userReducer,
         cart: cartReducer
     }
 })
