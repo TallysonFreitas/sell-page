@@ -4,16 +4,31 @@ import Header from "./containers/Header";
 import About from "./containers/About";
 
 function App() {
+    // URL REQUEST
     const product = new URLSearchParams(window.location.search);
 
-    const [product_data, setProduct_data] = useState(null);
+    // Product state
+    const [product_data, setProduct_data] = useState({
+        assessment: null,
+        description: null,
+        id: null,
+        image: null,
+        mark: null,
+        name: null,
+        price: null,
+        rate: null,
+        short_description: null,
+    });
 
+    // Requisition
     useEffect(() => {
         try {
             fetch(
                 `http://127.0.0.1:5000/get-product/${product.get("product-id")}`
             )
-                .then((data) => data.json())
+                .then((data) => {
+                    return data.json();
+                })
                 .then((res) => {
                     setTimeout(() => {
                         setProduct_data(res);
@@ -28,7 +43,7 @@ function App() {
         <>
             <EstiloGlobal />
             <Header />
-            <About caracteristicas={product_data} />
+            <About items={product_data} />
         </>
     );
 }
